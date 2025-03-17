@@ -16,7 +16,58 @@ Ktor Data Exchange is an **open-source, lightweight, and efficient** communicati
 - 🔹 **Secure Mobile Client Communication**
 - 🔹 **Offline Data Syncing**
 
-## 🏗 Project Structure
+## 👉 Dependencies
+```kotlin
+val ktor_version = "2.3.4"
+val kotlin_version = "1.9.0"
+val logback_version = "1.4.11"
+
+plugins {
+    kotlin("jvm") version kotlin_version
+    id("io.ktor.plugin") version ktor_version
+    application
+}
+
+group = "com.example"
+version = "1.0.0"
+
+application {
+    mainClass.set("com.example.ApplicationKt")
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Ktor Core
+    implementation("io.ktor:ktor-server-core:$ktor_version")
+    
+    // Netty Server Engine
+    implementation("io.ktor:ktor-server-netty:$ktor_version")
+
+    // JSON Serialization (Kotlinx)
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
+
+    // WebSockets Support
+    implementation("io.ktor:ktor-server-websockets:$ktor_version")
+
+    // Call Logging (For Debugging)
+    implementation("io.ktor:ktor-server-call-logging:$ktor_version")
+
+    // Content Negotiation (For Handling JSON Requests)
+    implementation("io.ktor:ktor-server-content-negotiation:$ktor_version")
+
+    // Logging with Logback
+    implementation("ch.qos.logback:logback-classic:$logback_version")
+
+    // Testing (Optional)
+    testImplementation("io.ktor:ktor-server-tests:$ktor_version")
+    testImplementation("org.jetbrains.kotlin:kotlin-test:$kotlin_version")
+}
+```
+
+## 🏰 Project Structure
 ```
 ktor-data-exchange/
 │── server/             # Ktor-based backend server
@@ -64,7 +115,7 @@ We welcome contributions! Follow these steps:
 3. **Commit your changes**
 4. **Open a Pull Request**
 
-## 📄 License
+## 📝 License
 This project is licensed under the [MIT License](LICENSE).
 
 ## 🌎 Community & Support
