@@ -1,11 +1,12 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
+    id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.0" // for Ktor
 }
 
 android {
     namespace = "com.jay.ktor_data_exchange"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.jay.ktor_data_exchange"
@@ -45,4 +46,34 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+
+    // Ktor
+    implementation(libs.ktor.server.core.v234)
+    implementation(libs.ktor.server.cio)
+    implementation(libs.ktor.server.content.negotiation.v234)
+    implementation(libs.ktor.serialization.kotlinx.json.v234)
+    implementation(libs.kotlinx.serialization.json)
+
+    // Koin for DI
+    implementation(libs.koin.core)
+    implementation(libs.koin.android)
+
+    // QR Code (Zxing)
+    implementation(libs.zxing.android.embedded)
+
+    // JWT
+    implementation(libs.java.jwt)
+    implementation (libs.nanohttpd)
+
+// Ktor client
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.cio)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.serialization.kotlinx.json.v233)
+
+// Kotlinx Serialization
+    implementation(libs.kotlinx.serialization.json.v151)
+
+
 }
