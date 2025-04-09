@@ -1,31 +1,20 @@
-package com.jay.ktor_data_exchange
+package com.jay.ktor_data_exchange.app_b.ui
 
 import android.app.Activity
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.util.Base64
 import android.widget.Button
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
+import com.jay.ktor_data_exchange.R
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.cio.CIO
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.request.header
-import io.ktor.client.request.post
-import io.ktor.client.request.setBody
-import io.ktor.http.ContentType
-import io.ktor.http.contentType
-import io.ktor.serialization.kotlinx.json.json
-import kotlinx.coroutines.launch
-import kotlinx.serialization.json.Json
-import java.io.InputStream
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AppBMainActivity : AppCompatActivity() {
+
+    private val viewModel: AppBViewModel by viewModel()
 
     private lateinit var qrLauncher: ActivityResultLauncher<ScanOptions>
     private lateinit var imagePickerLauncher: ActivityResultLauncher<Intent>
@@ -38,7 +27,7 @@ class AppBMainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_app_bmain)
 
-        // Set up QR scanner
+        // Setup QR Code Scanner
         qrLauncher = registerForActivityResult(ScanContract()) { result ->
             if (result.contents != null) {
                 val parts = result.contents.split("|")
@@ -51,20 +40,18 @@ class AppBMainActivity : AppCompatActivity() {
             }
         }
 
-        // Set up image picker
+        // Setup Image Picker
         imagePickerLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == Activity.RESULT_OK) {
                     val uri = result.data?.data
                     uri?.let {
-                        val base64Image = getBase64FromUri(it)
-                        lifecycleScope.launch {
-                            sendDataToServer(ip, port, token, base64Image)
-                        }
+                        viewModel.sendImage(this, it, ip, port, token)
                     }
                 }
             }
 
+        // Scan QR Button
         findViewById<Button>(R.id.scanQrBtn).setOnClickListener {
             startQrScan()
         }
@@ -84,37 +71,5 @@ class AppBMainActivity : AppCompatActivity() {
             type = "image/*"
         }
         imagePickerLauncher.launch(intent)
-    }
-
-    private fun getBase64FromUri(uri: Uri): String {
-        val inputStream: InputStream? = contentResolver.openInputStream(uri)
-        val bytes = inputStream?.readBytes() ?: return ""
-        return Base64.encodeToString(bytes, Base64.DEFAULT)
-    }
-
-    private suspend fun sendDataToServer(
-        ip: String,
-        port: Int,
-        token: String,
-        base64Image: String
-    ) {
-        val client = HttpClient(CIO) {
-            install(ContentNegotiation) {
-                json(Json { ignoreUnknownKeys = true })
-            }
-        }
-
-        try {
-            val response = client.post("http://$ip:$port/receive") {
-                header("Authorization", "Bearer $token")
-                contentType(ContentType.Application.Json)
-                setBody(base64Image)
-            }
-            println("Response status: ${response.status}")
-        } catch (e: Exception) {
-            e.printStackTrace()
-        } finally {
-            client.close()
-        }
     }
 }
