@@ -24,7 +24,7 @@ This open-source Android project allows **offline, secure image transfer** betwe
 
 ## 🧱 Architecture Overview
 
-![Architecture Diagram](docs/architecture.png)
+![Architecture Diagram](arc.png)
 
 ---
 
