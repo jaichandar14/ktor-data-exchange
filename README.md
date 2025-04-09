@@ -74,9 +74,10 @@ implementation("androidx.core:core-ktx:1.12.0")
 ```
 -----
 ## 📸 QR Code Content
-'''Format:
-   <IP Address>|<Port>|<Token>
-   Example: 192.168.0.102|8080|my_secure_token
+     ```Format:
+      <IP Address>|<Port>|<Token>
+      Example: 192.168.0.102|8080|my_secure_token
+      ```
 
 
 ## 📂 Project Structure
@@ -98,7 +99,7 @@ implementation("androidx.core:core-ktx:1.12.0")
   ![App A](AppA.gif)
 
 Demo App B
-  ![App B]( )
+  ![App B](AppB.png)
 
 ## 🧪 How to Test
    1.Install App A and App B on two Android devices (same Wi-Fi or hotspot).
