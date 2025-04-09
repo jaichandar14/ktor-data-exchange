@@ -93,6 +93,10 @@ implementation("androidx.core:core-ktx:1.12.0")
 
   ---
 
+## 📹 Demo
+
+![App A](demo a.gif)
+
 ## 🧪 How to Test
    1.Install App A and App B on two Android devices (same Wi-Fi or hotspot).
 
